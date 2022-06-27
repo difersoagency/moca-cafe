@@ -23,18 +23,17 @@ Route::get('/', function () {
     return view('pages.main');
 });
 
-Route::get('/menu', function () {
-    return view('pages.menu');
-});
-
-Route::get('/detail', function () {
-    return view('pages.detail_menu');
-});
 
 Route::get('/contact', function () {
     return view('pages.contact');
 });
 
+
+Route::group(['prefix' => '/menu'], function () {
+    Route::get('/', [App\Http\Controllers\RestoController::class, 'show_menu'])->name('menu.show');
+    Route::get('/data', [App\Http\Controllers\RestoController::class, 'menu_data'])->name('menu.data');
+    Route::get('/detail/{id}', [App\Http\Controllers\RestoController::class, 'menu_detail'])->name('menu.detail');
+});
 
 
 

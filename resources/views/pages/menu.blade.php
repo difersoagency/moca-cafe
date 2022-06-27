@@ -1,6 +1,12 @@
 @extends('layout.master')
 
 @section('content')
+<style>
+
+    div a.active{
+    color: red;
+ }
+</style>
 
 <section class="mb-96">
     <div class="flex mt-20 justify-between gap-11">
@@ -18,52 +24,51 @@
         <div class="grid grid-cols-3 gap-4 mt-8 content-center" data-aos="fade-down">
             <div class="self-center shadow-lg p-4 rounded-lg mb-auto mt-4">
                 <h2 class="font-bold text-4xl mb-3 leading-none mb-8">Category List</h1>
+                    <a href="" class="block mb-6 w-fit active transition-colors cat" id="cat0"  data-id="0">Semua</a>
                 <div class="category-list">
-                    <a href="" class="block mb-6 w-fit hover:text-red-500 transition-colors">Category </a>
-                    <a href="" class="block mb-6 w-fit hover:text-red-500 transition-colors">Category </a>
-                    <a href="" class="block mb-6 w-fit hover:text-red-500 transition-colors">Category </a>
-                    <a href="" class="block mb-6 w-fit hover:text-red-500 transition-colors">Category </a>
-                    <a href="" class="block w-fit hover:text-red-500 transition-colors">Category </a>
+                    @foreach ($kategori as $k )
+                    <a href="" id="cat{{$k->id}}" data-id="{{$k->id}}" class="block mb-6 w-fit hover:text-red-500 transition-colors cat">{{ucfirst($k->nama)}}</a>
+                    @endforeach
                 </div>
             </div>
             <div class="col-span-2 p-4">
                 <h2 class="font-bold text-4xl mb-3 mb-6" data-aos="fade-right">Catalog</h2>
-                <div class="menu grid grid-cols-3 gap-10">
-                    <div class="item-menu w-full border border-2 border-gray-300 hover:border-red-500 transition-all hover:shadow-lg h-fit px-4 py-6" data-aos="zoom-in">
-                        <img src="../../assets/images/food-banner.png" alt="" width="50%" height="auto" class="mb-3">
-                        <h2 class="text-red-500 font-bold text-xl mb-2">Nama Makanan</h2>
-                        <p class="text-gray-400 text-sm mb-5">Makanan Ayam yang dibakar dengan Bumbu Bumbu Terbaik menghasilkan cita rasa yang unik dan berbeda</p>
-                        <a href="/detail" class="bg-red-500 px-4 py-2 rounded-lg text-white text-sm hover:bg-red-900 transition-all">
-                            View Detail
-                        </a>
-                    </div>
-                    <div class="item-menu w-full border border-2 border-gray-300 hover:border-red-500 transition-all hover:shadow-lg h-fit px-4 py-6" data-aos="zoom-in">
-                        <img src="../../assets/images/food-banner.png" alt="" width="50%" height="auto" class="mb-3">
-                        <h2 class="text-red-500 font-bold text-xl mb-2">Nama Makanan</h2>
-                        <p class="text-gray-400 text-sm mb-5">Makanan Ayam yang dibakar dengan Bumbu Bumbu Terbaik menghasilkan cita rasa yang unik dan berbeda</p>
-                        <a href="/detail" class="bg-red-500 px-4 py-2 rounded-lg text-white text-sm hover:bg-red-900 transition-all">
-                            View Detail
-                        </a>
-                    </div>
-                    <div class="item-menu w-full border border-2 border-gray-300 hover:border-red-500 transition-all hover:shadow-lg h-fit px-4 py-6" data-aos="zoom-in">
-                        <img src="../../assets/images/food-banner.png" alt="" width="50%" height="auto" class="mb-3">
-                        <h2 class="text-red-500 font-bold text-xl mb-2">Nama Makanan</h2>
-                        <p class="text-gray-400 text-sm mb-5">Makanan Ayam yang dibakar dengan Bumbu Bumbu Terbaik menghasilkan cita rasa yang unik dan berbeda</p>
-                        <a href="/detail" class="bg-red-500 px-4 py-2 rounded-lg text-white text-sm hover:bg-red-900 transition-all">
-                            View Detail
-                        </a>
-                    </div>
-                    <div class="item-menu w-full border border-2 border-gray-300 hover:border-red-500 transition-all hover:shadow-lg h-fit px-4 py-6" data-aos="zoom-in">
-                        <img src="../../assets/images/food-banner.png" alt="" width="50%" height="auto" class="mb-3">
-                        <h2 class="text-red-500 font-bold text-xl mb-2">Nama Makanan</h2>
-                        <p class="text-gray-400 text-sm mb-5">Makanan Ayam yang dibakar dengan Bumbu Bumbu Terbaik menghasilkan cita rasa yang unik dan berbeda</p>
-                        <a href="/detail" class="bg-red-500 px-4 py-2 rounded-lg text-white text-sm hover:bg-red-900 transition-all">
-                            View Detail
-                        </a>
-                    </div>
+                <div class="menu grid grid-cols-3 gap-10" id="menu_body">
+                    @include('pages.data_menu')
                 </div>
             </div>
         </div>
     </section>
 
 @endsection
+<script src="{{asset('js/jquery-3.5.1.min.js')}}"></script>
+<script>
+      $(document).on('click', '.cat', function(event) {
+    event.preventDefault();
+     var id = $(this).data('id');
+
+
+     $('.cat').removeClass("active");
+     $('.cat').addClass("hover:text-red-500");
+
+
+    $('#cat'+id).removeClass("hover:text-red-500");
+    $('#cat'+id).addClass("active");
+
+    fetch_data(id);
+
+    function fetch_data(id)
+    {
+     $.ajax({
+        url:"{{route('menu.data')}}",
+        data:{id:id},
+           success:function(data)
+      {
+     $('#menu_body').html(data);
+
+      }
+     });
+    }
+
+})
+    </script>
